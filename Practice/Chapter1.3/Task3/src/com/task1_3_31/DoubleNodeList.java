@@ -40,14 +40,18 @@ public class DoubleNodeList<T> {
         }
     }
 
-    public void deleteFirst(){
+    public T first(){
+        T item = first.item;
         first = first.next;
         size--;
+        return item;
     }
 
-    public void deleteLast(){
+    public T last(){
+        T item = last.item;
         last = last.previous;
         size--;
+        return item;
     }
 
     public void insertBeforeNode(int index, T item){
@@ -98,26 +102,23 @@ public class DoubleNodeList<T> {
         }
     }
 
-    public void deleteNode(int index){
-        if(index < size && index > -1){
+    public T node(int index){
+        if(index == 0){
+            return first();
+        }
+        if(index == size - 1){
+            return last();
+        }
+        else{
+            T item = last.item;
             DoubleNode x = first; 
             for(int i = 0; i < index; i++){
                 x = x.next;
             }
-            if(index == 0){
-                deleteFirst();
-            }
-            if(index == size - 1){
-                deleteLast();
-            }
-            else{
             x.next = x.previous;
             x.previous = x.next;
             size--;
-            }
-        }
-        else{
-            System.out.println("Exeption");
+            return item;
         }
     }
 
