@@ -2,15 +2,15 @@ package com.task1_3_15;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Queue<T> {
-    @SuppressWarnings("unchecked")
-    private T[] array = (T[]) new Object[1];
+    private List<T> array = new ArrayList<>();
     int size = 0;
 
-    @SuppressWarnings("unchecked")
     private void resize(int max){
-        T[] temp = (T[]) new Object[max];
+        List<T> temp = new ArrayList<>(max);
         System.arraycopy(array, 0, temp, 0, size);
         array = temp;
     }
@@ -24,16 +24,15 @@ public class Queue<T> {
     }
 
     public void enqueue(T item){
-        if(size == array.length) resize(array.length*2);
-        array[size++] = item;
+        if(size == array.size()) resize(array.size()*2);
+        array.set(size++, item);
     }
 
-    @SuppressWarnings("unchecked")
     public T dequeue(){
-        T item = array[0];
-        T[] temp = (T[]) new Object[--size];
+        T item = array.get(0);
+        List<T> temp = new ArrayList<>(--size);
         System.arraycopy(array, 1, temp, 0, size);
-        if(size > 0 && size == array.length/4) resize(array.length/2);
+        if(size > 0 && size == array.size()/4) resize(array.size()/2);
         array = temp;
         return item;
     }

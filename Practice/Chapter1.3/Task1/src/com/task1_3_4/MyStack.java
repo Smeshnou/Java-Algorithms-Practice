@@ -1,13 +1,14 @@
 package com.task1_3_4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyStack<T> {
-    @SuppressWarnings("unchecked")
-    private T[] stack = (T[])new Object[1];
+    private List<T> stack = new ArrayList<>();
     private int size;
 
     private void resize(int max){
-        @SuppressWarnings("unchecked")
-        T[] temp = (T[])new Object[max];
+        List<T> temp = new ArrayList<>(max);
         System.arraycopy(stack, 0, temp, 0, size);
         stack = temp;
     }
@@ -21,15 +22,15 @@ public class MyStack<T> {
     }
 
     public void push(T item){
-        if(size == stack.length) resize(stack.length*2);
-        stack[size++] = item;
+        if(size == stack.size()) resize(stack.size()*2);
+        stack.set(size++, item);
     }
 
     public T pop(){
-        T item = stack[--size];
-        stack[size] = null;
-        if(size > 0 && size < stack.length/4) {
-            resize(stack.length/2);
+        T item = stack.get(--size);
+        stack.set(size, null);
+        if(size > 0 && size < stack.size()/4) {
+            resize(stack.size()/2);
         }
         return item;
     }

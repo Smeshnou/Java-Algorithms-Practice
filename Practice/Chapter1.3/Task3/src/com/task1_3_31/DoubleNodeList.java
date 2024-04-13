@@ -56,20 +56,20 @@ public class DoubleNodeList<T> {
 
     public void insertBeforeNode(int index, T item){
         if(index < size && index > -1){
-            DoubleNode x = first; 
+            DoubleNode indexNode = first; 
             for(int i = 0; i < index; i++){
-                x = x.next;
+                indexNode = indexNode.next;
             }
             if(index == 0){
                 insertBeginning(item);
             }
             else{
-            DoubleNode node = new DoubleNode();
-            node.item = item;
-            x.previous.next = node;
-            node.previous = x.previous;
-            node.next = x;
-            x.previous = node;
+            DoubleNode newNode = new DoubleNode();
+            newNode.item = item;
+            indexNode.previous.next = newNode;
+            newNode.previous = indexNode.previous;
+            newNode.next = indexNode;
+            indexNode.previous = newNode;
             size++;
             }
         }
@@ -80,20 +80,20 @@ public class DoubleNodeList<T> {
 
     public void insertAfterNode(int index, T item){
         if(index < size && index > -1){
-            DoubleNode x = first; 
+            DoubleNode indexNode = first; 
             for(int i = 0; i < index; i++){
-                x = x.next;
+                indexNode = indexNode.next;
             }
             if(index == size - 1){
                 insertEnd(item);
             }
             else{
-            DoubleNode node = new DoubleNode();
-            node.item = item;
-            x.next.previous = node;
-            node.next = x.next;
-            node.previous = x;
-            x.next = node;
+            DoubleNode newNode = new DoubleNode();
+            newNode.item = item;
+            indexNode.next.previous = newNode;
+            newNode.next = indexNode.next;
+            newNode.previous = indexNode;
+            indexNode.next = newNode;
             size++;
             }
         }
@@ -111,20 +111,20 @@ public class DoubleNodeList<T> {
         }
         else{
             T item = last.item;
-            DoubleNode x = first; 
+            DoubleNode indexNode = first; 
             for(int i = 0; i < index; i++){
-                x = x.next;
+                indexNode = indexNode.next;
             }
-            x.next = x.previous;
-            x.previous = x.next;
+            indexNode.next = indexNode.previous;
+            indexNode.previous = indexNode.next;
             size--;
             return item;
         }
     }
 
     public void show(){
-        for(DoubleNode x = first; x != null; x = x.next){
-            System.out.println(x.item);
+        for(DoubleNode curentNode = first; curentNode != null; curentNode = curentNode.next){
+            System.out.println(curentNode.item);
         }
     }
 }
