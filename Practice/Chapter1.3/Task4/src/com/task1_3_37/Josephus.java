@@ -1,8 +1,10 @@
 package com.task1_3_37;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class Josephus {
+    private static Logger logger = Logger.getLogger(Josephus.class.getName());
     public static void main(String[] args){
         Queue<Integer> queue = new Queue<>();
         Scanner scan = new Scanner(System.in);
@@ -16,7 +18,8 @@ public class Josephus {
             for(int j = 0; j < m - 1; j++){
                 queue.enqueue(queue.dequeue());
             }
-            System.out.print(queue.dequeue() + " ");
+            String str = queue.dequeue() + " ";
+            logger.info(str);
         }
     }
 }

@@ -1,6 +1,9 @@
 package com.task1_3_31;
 
+import java.util.logging.Logger;
+
 public class DoubleNodeList<T> {
+    private static Logger logger = Logger.getLogger(DoubleNodeList.class.getName());
     private DoubleNode first = null;
     private DoubleNode last = null;
 
@@ -74,7 +77,7 @@ public class DoubleNodeList<T> {
             }
         }
         else{
-            System.out.println("Error, incorrect index");
+            logger.warning("Error, incorrect index");
         }
     }
 
@@ -98,7 +101,7 @@ public class DoubleNodeList<T> {
             }
         }
         else{
-            System.out.println("Exeption");
+            logger.warning("Exeption");
         }
     }
 
@@ -124,7 +127,7 @@ public class DoubleNodeList<T> {
 
     public void show(){
         for(DoubleNode curentNode = first; curentNode != null; curentNode = curentNode.next){
-            System.out.println(curentNode.item);
+            logger.info((String) curentNode.item);
         }
     }
 }

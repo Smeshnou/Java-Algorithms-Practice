@@ -2,6 +2,7 @@ package com.task1_3_15;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class Queue<T> {
         return item;
     }
 
+    private static Logger logger = Logger.getLogger(Queue.class.getName());
+
     public static void main(String[] args){
         Queue<String> queue = new Queue<>();
         Scanner scan = new Scanner(System.in);
@@ -52,7 +55,8 @@ public class Queue<T> {
         for (int i = 0; i < size - k; i++){
             queue.dequeue();
         } 
-        System.out.println("Count of strings: " + (k + randomValue) + ". k-th string from end: "+ queue.dequeue());
+        String str = "Count of strings: " + (k + randomValue) + ". k-th string from end: "+ queue.dequeue();
+        logger.info(str);
     }
     
 }
