@@ -37,20 +37,4 @@ public class Domain implements Comparable<Domain> {
         return this.levels.size() - that.levels.size();
     }
 
-    @Override 
-    public boolean equals(Object obj){
-        if(this == obj){
-            return true;
-        }
-        else if(obj == null || this.getClass() != obj.getClass()){
-            return false;
-        }
-        return this.compareTo((Domain)obj) == 0;
-    } 
-
-    @Override
-    public int hashCode() {
-        int result = levels == null ? 0 : levels.hashCode();
-        return 31 * result;
-    }  
 }

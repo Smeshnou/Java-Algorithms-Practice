@@ -36,24 +36,8 @@ public class Vector implements Comparable<Vector>{
         return 0;
     }
 
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
-            return true;
-        }
-        else if(obj == null || this.getClass() != obj.getClass()){
-            return false;
-        }
-        return this.compareTo((Vector)obj) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = vect == null ? 0 : vect.hashCode();
-        return 31 * result;
-    }
-
     private static Logger logger = Logger.getLogger(Vector.class.getName());
+
     public static void main(String[] args) {
         List<Integer> vect1 = new ArrayList<>(List.of(5,7,4,3,6,1,2,3));
         List<Integer> vect2 = new ArrayList<>(List.of(2,3,3,7,1,5,4,8));
@@ -69,8 +53,4 @@ public class Vector implements Comparable<Vector>{
             logger.info(str);
         }
     }
-
-
-
-
 }

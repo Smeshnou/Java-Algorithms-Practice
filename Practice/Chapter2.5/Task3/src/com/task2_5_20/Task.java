@@ -15,31 +15,12 @@ public class Task implements Comparable<Task>{
     public int compareTo(Task that){
         return this.start.compareTo(that.start);
     }
-
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
-            return true;
-        }
-        else if(obj == null || this.getClass() != obj.getClass()){
-            return false;
-        }
-        return this.compareTo((Task)obj) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (start == null ? 0 : start.hashCode());
-        result = 31 * result + (end == null ? 0 : end.hashCode());
-        return result;
-    }  
-
-    public Time end(){
+    
+    public Time getEnd(){
         return end;
     }
 
-    public Time start(){
+    public Time getStart(){
         return start;
     }
-
 }

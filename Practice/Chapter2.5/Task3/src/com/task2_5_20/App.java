@@ -22,13 +22,13 @@ public class App {
 
         list.sort(null);
 
-        long maxDownTime = list.get(1).start().getTime() - list.get(0).end().getTime();
-        Time startWork = list.get(0).start();
-        Time endWork = list.get(0).end();
+        long maxDownTime = list.get(1).getStart().getTime() - list.get(0).getEnd().getTime();
+        Time startWork = list.get(0).getStart();
+        Time endWork = list.get(0).getEnd();
         long maxWorkInterval = 0;
         long interval;
         for(int i = 1; i < list.size() - 1; ++i){
-            interval = list.get(i + 1).start().getTime() - list.get(i).end().getTime();
+            interval = list.get(i + 1).getStart().getTime() - list.get(i).getEnd().getTime();
             if(interval > maxDownTime){
                 maxDownTime = interval;
                 if(endWork.getTime() - startWork.getTime() > maxWorkInterval){
@@ -36,11 +36,11 @@ public class App {
                 }
             }
             if(interval > 0){
-                startWork = list.get(i + 1).start();
-                endWork = list.get(i + 1).end();
+                startWork = list.get(i + 1).getStart();
+                endWork = list.get(i + 1).getEnd();
             }
             else{
-                endWork = list.get(i + 1).end();
+                endWork = list.get(i + 1).getEnd();
             }
         }
         if(endWork.getTime() - startWork.getTime() > maxWorkInterval){
