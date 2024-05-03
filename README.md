@@ -10,7 +10,9 @@
 ### Plan: 4h
 ### Fact: 5h
 
-### Chapter 3.2
+### Chapter 3.2: https://github.com/Smeshnou/Java-Algorithms-Practice/tree/main/Practice/Chapter3.2
+### Plan: 3.7h
+### Fact: 3.5h
 
 ### Chapter 3.3
 
