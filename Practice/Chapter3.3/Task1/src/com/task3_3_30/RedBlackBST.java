@@ -1,6 +1,7 @@
 package com.task3_3_30;
 
-
+import java.lang.constant.Constable;
+import java.util.Optional;
 
 public class RedBlackBST<K extends Comparable<K>, V> {
     private Node root;
@@ -23,11 +24,12 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     private boolean isRed(Node node){
-        if(node == null){
-            return false;
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isPresent()){
+            return node.color == RED;
         }
         else{
-            return node.color == RED;
+            return false;
         }
     }
 
@@ -64,32 +66,35 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     private int size(Node node){
-        if(node == null) {
-            return 0;
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isPresent()){
+            return node.size;
         }
         else{
-            return node.size;
+            return 0;
         }
     }
 
     public V get(K key){
-        if(lastAccessedNode != null && lastAccessedNode.key == key){
-            return lastAccessedNode.val;
+        Optional<Node> optNode = Optional.ofNullable(lastAccessedNode);
+        if(optNode.isPresent()){
+            if(optNode.get().key == key){
+                return optNode.get().val;
+            }
         }
         else{
-            Node node = get(root, key);
-            if(node != null){
-                return node.val;
-            }
-            else{
-                return null;
+            optNode = get(root, key);
+            if(optNode.isPresent()){
+                return optNode.get().val;
             }
         }
+        return null;
     }
 
-    private Node get(Node node, K key){
-        if(node == null){
-            return null;
+    private Optional<Node> get(Node node, K key){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(key != node.key){
             if(key.compareTo(node.key) > 0){
@@ -98,18 +103,19 @@ public class RedBlackBST<K extends Comparable<K>, V> {
             else if(key.compareTo(node.key) < 0){
                 node = node.left;
             }
-            
-            if(node == null){
-                return null;
+            optNode = Optional.ofNullable(node);
+            if(optNode.isEmpty()){
+                return optNode;
             }
         }
         lastAccessedNode = node;
-        return node;
+        return optNode;
     }
 
     public void put(K key, V val){
-        if(lastAccessedNode != null && lastAccessedNode.key == key){
-            lastAccessedNode.val = val;
+        Optional<Node> optNode = Optional.ofNullable(lastAccessedNode);
+        if(optNode.isPresent() && optNode.get().key == key){
+                lastAccessedNode.val = val;
         }
         else{
             root = put(root, key, val);
@@ -118,7 +124,8 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     private Node put(Node node, K key, V val){
-        if(node == null){ 
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){ 
             lastAccessedNode = new Node(key, val, 1, RED); 
             return lastAccessedNode;
         }
@@ -148,38 +155,42 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     public K min(){
-        if(root == null){
+        if(Optional.ofNullable(root).isEmpty()){
             return null;
         }
-        return min(root).key;
+        return min(root).get().key;
     }
 
-    private Node min(Node node){
-        if(node == null){
-            return null;
+    private Optional<Node> min(Node node){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(node.left != null){
             node = node.left;
         }
         lastAccessedNode = node;
-        return node;
+        optNode = Optional.of(node);
+        return optNode;
     }
 
     public K max(){
-        if(root == null){
+        if(Optional.ofNullable(root).isEmpty()){
             return null;
         }
-        return max(root).key;
+        return max(root).get().key;
     }
 
-    private Node max(Node node){
-        if(node == null){
-            return null;
+    private Optional<Node> max(Node node){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(node.right != null){
             node = node.right;
         }
         lastAccessedNode = node;
-        return node;
+        optNode = Optional.of(node);
+        return optNode;
     }
 }

@@ -1,5 +1,6 @@
 package com.task3_3_41;
 
+import java.util.Optional;
 
 public class RedBlackBST<K extends Comparable<K>, V> {
     private Node root;
@@ -21,7 +22,7 @@ public class RedBlackBST<K extends Comparable<K>, V> {
         }
     }
 
-     public boolean contains(K key) {
+    public boolean contains(K key) {
         return get(key) != null;
     }
 
@@ -35,7 +36,6 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
     
     private Node delete(Node node, K key){
-
         if (key.compareTo(node.key) < 0){
             if (!isRed(node.left) && !isRed(node.left.left)){
                 node = moveRedLeft(node);
@@ -53,9 +53,9 @@ public class RedBlackBST<K extends Comparable<K>, V> {
                 node = moveRedRight(node);
             }
             if (key.compareTo(node.key) == 0) {
-                node.val = get(node.right, min(node.right).key).val;
-                node.key = min(node.right).key;
-                node.right = deleteMin(node.right);
+                node.val = get(node.right, min(node.right).get().key).get().val;
+                node.key = min(node.right).get().key;
+                node.right = deleteMin(node.right).get();
             }
             else{
                 node.right = delete(node.right, key);
@@ -68,49 +68,50 @@ public class RedBlackBST<K extends Comparable<K>, V> {
         if (!isRed(root.left) && !isRed(root.right)){
             root.color = RED;
         }
-        root = deleteMax(root);
+        root = deleteMax(root).get();
         if (!isEmpty()){ 
             root.color = BLACK;
         }
     }
 
-    private Node deleteMax(Node h){
-        if (isRed(h.left)){
-            h = rotateRight(h);
+    private Optional<Node> deleteMax(Node node){
+        if (isRed(node.left)){
+            node = rotateRight(node);
         }
-        if (h.right == null){
-            return null;
+        Optional<Node> optNode = Optional.ofNullable(node.left);
+        if (optNode.isEmpty()){
+            return optNode;
         }
-        if (!isRed(h.right) && !isRed(h.right.left)){
-            h = moveRedRight(h);
+        if (!isRed(node.right) && !isRed(node.right.left)){
+            node = moveRedRight(node);
         }
-        h.right = deleteMax(h.right);
-
-        return balance(h);
+        node.right = deleteMin(node.right).get();
+        return Optional.ofNullable(balance(node));
     }
 
-    public void deleteMin(){
+    public void deleteMin() {
         if (!isRed(root.left) && !isRed(root.right)){
             root.color = RED;
         }
-        root = deleteMin(root);
+        root = deleteMin(root).get();
         if (!isEmpty()){
             root.color = BLACK;
         }
     }
 
-    private Node deleteMin(Node node){
-        if (node.left == null){
-            return null;
+    private Optional<Node> deleteMin(Node node) {
+        Optional<Node> optNode = Optional.ofNullable(node.left);
+        if (optNode.isEmpty()){
+            return optNode;
         }
         if (!isRed(node.left) && !isRed(node.left.left)){
             node = moveRedLeft(node);
         }
-        node.left = deleteMin(node.left);
-        return balance(node);
+        node.left = deleteMin(node.left).get();
+        return Optional.ofNullable(balance(node));
     }
 
-    private Node balance(Node node){
+    private Node balance(Node node) {
         if (isRed(node.right) && !isRed(node.left)){
             node = rotateLeft(node);
         }
@@ -124,16 +125,7 @@ public class RedBlackBST<K extends Comparable<K>, V> {
         return node;
     }
 
-    private Node moveRedRight(Node h){
-        flipColors(h);
-        if (isRed(h.left.left)) {
-            h = rotateRight(h);
-            flipColors(h);
-        }
-        return h;
-    }
-
-    private Node moveRedLeft(Node h){
+    private Node moveRedLeft(Node h) {
         flipColors(h);
         if (isRed(h.right.left)) {
             h.right = rotateRight(h.right);
@@ -147,16 +139,17 @@ public class RedBlackBST<K extends Comparable<K>, V> {
         return isEmpty(root);
     }
 
-    public boolean isEmpty(Node node){
+    private boolean isEmpty(Node node){
         return node == null;
     }
 
     private boolean isRed(Node node){
-        if(node == null){
-            return false;
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isPresent()){
+            return node.color == RED;
         }
         else{
-            return node.color == RED;
+            return false;
         }
     }
 
@@ -193,32 +186,35 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     private int size(Node node){
-        if(node == null) {
-            return 0;
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isPresent()){
+            return node.size;
         }
         else{
-            return node.size;
+            return 0;
         }
     }
 
     public V get(K key){
-        if(lastAccessedNode != null && lastAccessedNode.key == key){
-            return lastAccessedNode.val;
+        Optional<Node> optNode = Optional.ofNullable(lastAccessedNode);
+        if(optNode.isPresent()){
+            if(optNode.get().key == key){
+                return optNode.get().val;
+            }
         }
         else{
-            Node node = get(root, key);
-            if(node != null){
-                return node.val;
-            }
-            else{
-                return null;
+            optNode = get(root, key);
+            if(optNode.isPresent()){
+                return optNode.get().val;
             }
         }
+        return null;
     }
 
-    private Node get(Node node, K key){
-        if(node == null){
-            return null;
+    private Optional<Node> get(Node node, K key){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(key != node.key){
             if(key.compareTo(node.key) > 0){
@@ -227,18 +223,19 @@ public class RedBlackBST<K extends Comparable<K>, V> {
             else if(key.compareTo(node.key) < 0){
                 node = node.left;
             }
-            
-            if(node == null){
-                return null;
+            optNode = Optional.ofNullable(node);
+            if(optNode.isEmpty()){
+                return optNode;
             }
         }
         lastAccessedNode = node;
-        return node;
+        return optNode;
     }
 
     public void put(K key, V val){
-        if(lastAccessedNode != null && lastAccessedNode.key == key){
-            lastAccessedNode.val = val;
+        Optional<Node> optNode = Optional.ofNullable(lastAccessedNode);
+        if(optNode.isPresent() && optNode.get().key == key){
+                lastAccessedNode.val = val;
         }
         else{
             root = put(root, key, val);
@@ -247,7 +244,8 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     private Node put(Node node, K key, V val){
-        if(node == null){ 
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){ 
             lastAccessedNode = new Node(key, val, 1, RED); 
             return lastAccessedNode;
         }
@@ -277,38 +275,51 @@ public class RedBlackBST<K extends Comparable<K>, V> {
     }
 
     public K min(){
-        if(root == null){
+        if(Optional.ofNullable(root).isEmpty()){
             return null;
         }
-        return min(root).key;
+        return min(root).get().key;
     }
 
-    private Node min(Node node){
-        if(node == null){
-            return null;
+    private Optional<Node> min(Node node){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(node.left != null){
             node = node.left;
         }
         lastAccessedNode = node;
-        return node;
+        optNode = Optional.of(node);
+        return optNode;
     }
 
     public K max(){
-        if(root == null){
+        if(Optional.ofNullable(root).isEmpty()){
             return null;
         }
-        return max(root).key;
+        return max(root).get().key;
     }
 
-    private Node max(Node node){
-        if(node == null){
-            return null;
+    private Optional<Node> max(Node node){
+        Optional<Node> optNode = Optional.ofNullable(node);
+        if(optNode.isEmpty()){
+            return optNode;
         }
         while(node.right != null){
             node = node.right;
         }
         lastAccessedNode = node;
-        return node;
+        optNode = Optional.of(node);
+        return optNode;
+    }
+
+    private Node moveRedRight(Node h){
+        flipColors(h);
+        if (isRed(h.left.left)) {
+            h = rotateRight(h);
+            flipColors(h);
+        }
+        return h;
     }
 }
